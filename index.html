@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GlossPak — Avtomatik palletlash yechimlari</title>
+<meta name="description" content="Palletayzer orqali stretch o'rashni avtomatlashtiring — plyonka xarajatini o'rtacha 3 barobargacha tushiring. Qancha tejashingizni kalkulyatorda hisoblang.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04060d;
+  --ink:#eef2fb;
+  --muted:#8e9bb5;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.16);
+  --card:rgba(255,255,255,.026);
+  --accent:#5b8cff;
+  --accent-dim:#2b4fa8;
+  --radius:18px;
+  --maxw:1060px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ---------- Glow fon ---------- */
+.glow-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(90px);
+  opacity:.55;
+  will-change:transform;
+}
+.orb-1{
+  width:640px;height:640px;top:-180px;left:-160px;
+  background:radial-gradient(circle at 50% 50%, #1b3f9e 0%, #12295f 45%, rgba(8,16,42,0) 72%);
+  animation:drift1 34s ease-in-out infinite;
+}
+.orb-2{
+  width:720px;height:720px;top:38%;right:-260px;
+  background:radial-gradient(circle at 50% 50%, #12408f 0%, #0d2452 48%, rgba(6,14,36,0) 74%);
+  animation:drift2 44s ease-in-out infinite;
+}
+.orb-3{
+  width:560px;height:560px;bottom:-200px;left:22%;
+  background:radial-gradient(circle at 50% 50%, #1d3c8c 0%, #0f2450 50%, rgba(6,12,32,0) 75%);
+  animation:drift3 38s ease-in-out infinite;
+}
+.orb-4{
+  width:420px;height:420px;top:16%;left:44%;
+  background:radial-gradient(circle at 50% 50%, #24509f 0%, rgba(9,20,50,0) 68%);
+  opacity:.32;
+  animation:drift4 52s ease-in-out infinite;
+}
+@keyframes drift1{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  33%{transform:translate3d(140px,90px,0) scale(1.12)}
+  66%{transform:translate3d(60px,220px,0) scale(.95)}
+}
+@keyframes drift2{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  30%{transform:translate3d(-180px,-120px,0) scale(1.08)}
+  70%{transform:translate3d(-90px,140px,0) scale(.92)}
+}
+@keyframes drift3{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  40%{transform:translate3d(180px,-140px,0) scale(1.1)}
+  75%{transform:translate3d(-120px,-60px,0) scale(.96)}
+}
+@keyframes drift4{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(-220px,180px,0) scale(1.2)}
+}
+@media (prefers-reduced-motion: reduce){
+  .orb{animation:none}
+}
+
+/* ---------- Tuzilma ---------- */
+.shell{position:relative;z-index:1}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+header.nav{padding:26px 0}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:inline-flex;align-items:center;line-height:0}
+.logo img{height:46px;width:auto;display:block}
+@media (max-width:520px){.logo img{height:38px}}
+.nav-link{
+  color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500;
+  padding:9px 16px;border:1px solid var(--line);border-radius:999px;
+  transition:.2s;
+}
+.nav-link:hover{color:var(--ink);border-color:var(--line-strong);background:rgba(255,255,255,.04)}
+
+/* ---------- Hero ---------- */
+.hero{padding:74px 0 96px;max-width:820px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:#9db4e8;
+  border:1px solid var(--line);border-radius:999px;
+  padding:7px 15px;margin-bottom:28px;
+  background:rgba(91,140,255,.06);
+}
+.dot{width:6px;height:6px;border-radius:50%;background:#5b8cff;box-shadow:0 0 10px #5b8cff}
+h1{
+  margin:0 0 22px;
+  font-size:clamp(30px,4.8vw,48px);
+  line-height:1.08;
+  letter-spacing:-.035em;
+  font-weight:700;
+}
+h1 .soft{color:#7f93bb}
+h1 .hl{color:#7fa6ff}
+.lead{
+  margin:0 0 36px;
+  font-size:clamp(16.5px,2.1vw,19px);
+  color:var(--muted);
+  max-width:600px;
+}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 26px;border-radius:12px;
+  font-size:15px;font-weight:600;text-decoration:none;
+  border:1px solid transparent;cursor:pointer;transition:.2s;
+  font-family:inherit;
+}
+.btn-primary{
+  background:linear-gradient(180deg,#4d82ff,#2c5adf);
+  color:#fff;
+  box-shadow:0 8px 30px rgba(45,90,220,.35);
+}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line-strong);color:var(--ink)}
+.btn-ghost:hover{background:rgba(255,255,255,.08)}
+
+/* ---------- Bo'limlar ---------- */
+section{padding:76px 0;border-top:1px solid var(--line)}
+.sec-head{max-width:620px;margin-bottom:40px}
+h2{margin:0 0 12px;font-size:clamp(26px,4vw,36px);letter-spacing:-.03em;line-height:1.15;font-weight:700}
+.sec-sub{margin:0;color:var(--muted);font-size:16.5px}
+
+/* ---------- Uskuna fotolari ---------- */
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.shot{margin:0}
+.shot.wide{grid-column:span 2}
+/* Suratlar oq fonda olingani uchun plastinka ham oq —
+   shunda fon ko'rinmaydi, surat kartaga quyilgandek turadi. */
+.plate{
+  position:relative;
+  background:#fff;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.shot.wide .plate{aspect-ratio:16/10}
+.shot.tall .plate{aspect-ratio:3/3.6}
+.plate img{
+  display:block;width:100%;height:100%;
+  object-fit:contain;padding:14px;
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+}
+.shot:hover .plate img{transform:scale(1.04)}
+.shot figcaption{
+  margin-top:12px;font-size:13.5px;color:var(--muted);
+}
+/* Rasm hali qo'yilmagan bo'lsa */
+.plate .ph{display:none}
+.shot.empty .plate{background:rgba(255,255,255,.02);border-style:dashed;border-color:var(--line-strong)}
+.shot.empty img{display:none}
+.shot.empty .ph{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:20px;text-align:center;color:#5d6a83;
+}
+.shot.empty .ph svg{opacity:.5}
+.shot.empty .ph code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12.5px;color:#7f8ea9;
+  background:rgba(255,255,255,.05);border-radius:6px;padding:4px 9px;
+}
+@media (max-width:720px){
+  .shots{grid-template-columns:1fr}
+  .shot.wide{grid-column:auto}
+  .shot.wide .plate{aspect-ratio:16/10}
+}
+
+/* ---------- Kalkulyator ---------- */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.field{margin-bottom:26px}
+.field:last-child{margin-bottom:0}
+.field-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:11px}
+label{font-size:14.5px;font-weight:500;color:#c3cddf}
+.field-val{font-size:15px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+.field-val.hint{font-size:13px;font-weight:500;color:#6f7e99}
+
+.money{position:relative}
+.money input{
+  width:100%;padding:13px 58px 13px 15px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:11px;
+  color:#fff;font-size:16px;font-weight:600;font-family:inherit;
+  font-variant-numeric:tabular-nums;
+  outline:none;transition:.18s;
+}
+.money input:focus{border-color:rgba(91,140,255,.6);background:rgba(91,140,255,.07)}
+.money .cur{
+  position:absolute;right:15px;top:50%;transform:translateY(-50%);
+  font-size:13.5px;color:var(--muted);pointer-events:none;font-weight:500;
+}
+
+.seg{display:flex;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:11px;padding:4px}
+.seg button{
+  flex:1;padding:9px 0;border:none;border-radius:8px;background:transparent;
+  color:var(--muted);font-size:14.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.18s;
+}
+.seg button[aria-pressed="true"]{background:rgba(77,130,255,.9);color:#fff;box-shadow:0 3px 14px rgba(45,90,220,.35)}
+
+.field-hint{margin-top:9px;font-size:12.5px;color:#6f7e99}
+
+/* Plyonka solishtiruvi */
+.film{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.film-row{margin-bottom:16px}
+.film-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.film-head span:first-child{font-size:13.5px;color:var(--muted)}
+.film-v{font-size:14px;font-weight:600;color:#e8b4a4;font-variant-numeric:tabular-nums}
+.film-v.ok{color:#8fb6ff}
+.film-track{height:12px;border-radius:99px;background:rgba(255,255,255,.05);overflow:hidden}
+.film-fill{height:100%;border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.film-fill.manual{background:linear-gradient(90deg,#a8452f,#d0664c)}
+.film-fill.machine{background:linear-gradient(90deg,#2c5adf,#5b8cff)}
+.film-note{margin:14px 0 0;font-size:13px;color:#8e9bb5;line-height:1.55}
+.film-note b{color:#e8eefb;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* Natija */
+.result{
+  background:linear-gradient(165deg,rgba(35,70,160,.30),rgba(10,18,44,.30));
+  border:1px solid rgba(91,140,255,.24);
+}
+.res-hero{padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--line)}
+.res-label{font-size:13.5px;color:#9db4e8;font-weight:500;margin-bottom:8px}
+.res-big{
+  font-size:clamp(30px,5.4vw,42px);font-weight:700;letter-spacing:-.035em;line-height:1.05;
+  font-variant-numeric:tabular-nums;color:#fff;
+}
+.res-big .unit{font-size:.44em;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:6px}
+.res-year{margin-top:12px;font-size:14.5px;color:#9db4e8}
+.res-year b{color:#fff;font-weight:600;font-variant-numeric:tabular-nums}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 16px}
+.res-item .k span{display:block;font-size:11.5px;color:#5d6a83;margin-top:2px}
+.payback{
+  margin-top:24px;padding:20px;border-radius:13px;
+  background:rgba(127,227,168,.07);border:1px solid rgba(127,227,168,.22);
+}
+.pb-k{font-size:13px;color:#8fc9a8;margin-bottom:4px}
+.pb-v{font-size:30px;font-weight:700;letter-spacing:-.03em;color:#8fe9b4;font-variant-numeric:tabular-nums;line-height:1.1}
+.pb-sub{margin-top:9px;font-size:13px;color:#8e9bb5;line-height:1.55}
+.pb-sub b{color:#e8eefb;font-weight:600;font-variant-numeric:tabular-nums}
+.res-item .k{font-size:13px;color:var(--muted);margin-bottom:6px}
+.res-item .v{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.res-item .v.pos{color:#7fe3a8}
+.note{
+  margin-top:24px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:13px;line-height:1.6;color:#6f7e99;
+}
+
+/* ---------- Lid forma ---------- */
+.lead-sec .inner{
+  max-width:620px;margin:0 auto;text-align:center;
+}
+.form-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:32px;text-align:left;margin-top:36px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f{margin-bottom:14px}
+.f label{display:block;margin-bottom:8px;font-size:13.5px;color:#c3cddf}
+.f input,.f textarea{
+  width:100%;padding:13px 15px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:11px;
+  color:#fff;font-size:15.5px;font-family:inherit;outline:none;transition:.18s;resize:vertical;
+}
+.f input::placeholder,.f textarea::placeholder{color:#5d6a83}
+.f input:focus,.f textarea:focus{border-color:rgba(91,140,255,.6);background:rgba(91,140,255,.07)}
+.f input.err{border-color:#d9556b}
+.form-card .btn-primary{width:100%;margin-top:8px;padding:15px}
+.privacy{margin:14px 0 0;font-size:12.5px;color:#6f7e99;text-align:center}
+.form-msg{margin:14px 0 0;font-size:14px;text-align:center;display:none}
+.form-msg.show{display:block}
+.form-msg.ok{color:#7fe3a8}
+.form-msg.bad{color:#f2879a}
+.sent{text-align:center;padding:26px 0}
+.sent .ic{
+  width:52px;height:52px;border-radius:50%;margin:0 auto 18px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(127,227,168,.12);border:1px solid rgba(127,227,168,.35);color:#7fe3a8;
+}
+.sent h3{margin:0 0 8px;font-size:21px;letter-spacing:-.02em}
+.sent p{margin:0;color:var(--muted);font-size:15px}
+
+footer{
+  border-top:1px solid var(--line);padding:30px 0 44px;
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  color:#6f7e99;font-size:13.5px;
+}
+footer a{color:#9db4e8;text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media (max-width:860px){
+  .calc{grid-template-columns:1fr}
+  section{padding:60px 0}
+  .hero{padding:52px 0 68px}
+}
+@media (max-width:520px){
+  .wrap{padding:0 18px}
+  .panel,.form-card{padding:22px}
+  .row2{grid-template-columns:1fr}
+  .res-grid{grid-template-columns:1fr}
+  .cta-row .btn{flex:1}
+}
+</style>
+</head>
+<body>
+
+<div class="glow-wrap" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<div class="shell">
+
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="logo" href="#"><img src="img/logo-light.png" alt="GlossPak"></a>
+      <a class="nav-link" href="#ariza">Taklif olish</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="wrap">
+    <div class="hero">
+      <span class="eyebrow"><span class="dot"></span> Avtomatik palletlash yechimlari</span>
+      <h1>Qadoqlash jarayonini avtomatlashtirib<br>
+        <span class="hl">3 barobargacha</span> tejamkorlik ko'rishga
+        <span class="soft">tayyormisiz?</span></h1>
+      <p class="lead">
+        Palletayzer orqali stretch o'rashni (qadoqlash jarayonini) avtomatlashtirish
+        orqali plyonka xarajatini o'rtacha 3 barobargacha tushirasiz.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#kalkulyator">Qancha tejashingizni hisoblang</a>
+        <a class="btn btn-ghost" href="#ariza">Taklif olish</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KALKULYATOR -->
+  <section id="kalkulyator">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Palletayzer sizga qancha tejaydi?</h2>
+        <p class="sec-sub">Faqat uchta raqamni kiriting — o'zingiz aniq bilgan raqamlarni.
+          Qolganini biz oldindan hisoblab qo'yganmiz.</p>
+      </div>
+
+      <div class="calc">
+        <!-- Kirish -->
+        <div class="panel">
+          <div class="field">
+            <div class="field-top">
+              <label for="pallets">Kuniga nechta poddon o'raysiz</label>
+            </div>
+            <div class="money">
+              <input type="text" id="pallets" inputmode="numeric" value="40"
+                     data-default="40" data-max="5000" autocomplete="off">
+              <span class="cur">ta / kun</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-top">
+              <label for="filmManual">Hozir bitta poddonga qancha plyonka ketadi</label>
+            </div>
+            <div class="money">
+              <input type="text" id="filmManual" inputmode="numeric" value="1 100"
+                     data-default="1100" data-max="9000" autocomplete="off">
+              <span class="cur">gramm</span>
+            </div>
+            <div class="field-hint">Qo'lda o'raganda odatda 900–1400 g</div>
+          </div>
+
+          <div class="field">
+            <div class="field-top">
+              <label for="filmPrice">Plyonkaning 1 kg narxi</label>
+            </div>
+            <div class="money">
+              <input type="text" id="filmPrice" inputmode="numeric" value="28 000" autocomplete="off">
+              <span class="cur">so'm / kg</span>
+            </div>
+          </div>
+
+          <!-- Plyonka solishtiruvi -->
+          <div class="film">
+            <div class="film-row">
+              <div class="film-head">
+                <span>Qo'lda</span><span class="film-v" id="barManualV">1 100 g</span>
+              </div>
+              <div class="film-track"><div class="film-fill manual" id="barManual"></div></div>
+            </div>
+            <div class="film-row">
+              <div class="film-head">
+                <span>Palletayzer bilan</span><span class="film-v ok" id="barMachineV">350 g</span>
+              </div>
+              <div class="film-track"><div class="film-fill machine" id="barMachine"></div></div>
+            </div>
+            <p class="film-note">
+              Har bir poddonda <b id="barDiff">750 g</b> plyonka tejaladi —
+              bu oyiga <b id="barKg">780 kg</b> plyonka.
+            </p>
+          </div>
+        </div>
+
+        <!-- Natija -->
+        <div class="panel result">
+          <div class="res-hero">
+            <div class="res-label">Har oy tejaysiz</div>
+            <div class="res-big"><span id="rMonth">—</span><span class="unit">so'm</span></div>
+            <div class="res-year">Bir yilda — <b id="rYear">—</b> so'm</div>
+          </div>
+
+          <div class="res-grid">
+            <div class="res-item">
+              <div class="k">Plyonkada tejash <span>oyiga</span></div>
+              <div class="v" id="rFilm">—</div>
+            </div>
+            <div class="res-item">
+              <div class="k">Vaqtda tejash <span>oyiga</span></div>
+              <div class="v" id="rTime">—</div>
+            </div>
+          </div>
+
+          <div class="payback">
+            <div class="pb-k">Palletayzer o'zini qoplaydi</div>
+            <div class="pb-v" id="rPayback">—</div>
+            <div class="pb-sub">Keyin esa shu pul sizda qoladi.
+              3 yilda sof foyda — <b id="rThree">—</b> so'm.</div>
+          </div>
+
+          <p class="note">
+            Hisobda: palletayzer bir poddonga <b>350 g</b> plyonka sarflaydi va poddonni
+            <b>1 daqiqa</b> tezroq o'raydi; oyiga <b>26</b> ish kuni, ishchining oylik
+            xarajati <b>4 500 000</b> so'm, uskuna narxi <b>160 000 000</b> so'm.
+            Raqamlar taxminiy — aniq taklif uchun ariza qoldiring.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LID FORMA -->
+  <section class="lead-sec" id="ariza">
+    <div class="wrap">
+      <div class="inner">
+        <div class="sec-head" style="margin:0 auto;text-align:center">
+          <h2>Aniq taklif oling</h2>
+          <p class="sec-sub">Ma'lumotlaringizni qoldiring. Mutaxassisimiz 1 ish kuni ichida
+            bog'lanadi va liniyangizga mos hisob-kitobni tayyorlaydi.</p>
+        </div>
+
+        <div class="form-card" id="formCard">
+          <form id="leadForm" novalidate>
+            <div class="row2">
+              <div class="f">
+                <label for="name">Ism *</label>
+                <input type="text" id="name" name="name" placeholder="Ismingiz" autocomplete="name">
+              </div>
+              <div class="f">
+                <label for="phone">Telefon *</label>
+                <input type="tel" id="phone" name="phone" placeholder="+998 90 123 45 67" autocomplete="tel">
+              </div>
+            </div>
+            <div class="f">
+              <label for="company">Korxona nomi</label>
+              <input type="text" id="company" name="company" placeholder="Masalan: Gloss Food MChJ" autocomplete="organization">
+            </div>
+            <div class="f">
+              <label for="comment">Izoh <span style="color:#6f7e99">(ixtiyoriy)</span></label>
+              <textarea id="comment" name="comment" rows="3" placeholder="Qanday mahsulot palletlanadi, kunlik hajm..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Ariza yuborish</button>
+            <p class="form-msg" id="formMsg"></p>
+            <p class="privacy">Ma'lumotlaringiz uchinchi shaxslarga berilmaydi.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USKUNA FOTOLARI -->
+  <section id="uskuna">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Uskunani ko'ring</h2>
+        <p class="sec-sub">Aylanuvchi stol, plyonkani oldindan tortish uzeli va sodda
+          boshqaruv paneli — plyonka tejalishining butun siri shu uchta qismda.</p>
+      </div>
+
+      <div class="shots">
+        <figure class="shot wide">
+          <div class="plate">
+            <img src="img/palletayzer-1.png" alt="Stretch o'rash palletayzeri — umumiy ko'rinish" loading="lazy">
+            <div class="ph">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M21 16l-5-5-5.5 5.5L8 14l-5 5"/></svg>
+              <code>img/palletayzer-1.png</code>
+            </div>
+          </div>
+          <figcaption>Umumiy ko'rinish — aylanuvchi stol va plyonka ustuni</figcaption>
+        </figure>
+
+        <figure class="shot tall">
+          <div class="plate">
+            <img src="img/palletayzer-2.jpg" alt="Plyonkani oldindan tortish uzeli" loading="lazy">
+            <div class="ph">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M21 16l-5-5-5.5 5.5L8 14l-5 5"/></svg>
+              <code>img/palletayzer-2.jpg</code>
+            </div>
+          </div>
+          <figcaption>Plyonkani oldindan tortish uzeli — aynan shu qism plyonkani tejaydi</figcaption>
+        </figure>
+
+        <figure class="shot tall">
+          <div class="plate">
+            <img src="img/palletayzer-3.jpg" alt="Palletayzerning boshqaruv paneli" loading="lazy">
+            <div class="ph">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M21 16l-5-5-5.5 5.5L8 14l-5 5"/></svg>
+              <code>img/palletayzer-3.jpg</code>
+            </div>
+          </div>
+          <figcaption>Boshqaruv paneli — rejimni bitta g'ildirak bilan tanlanadi</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <footer>
+      <div>© <span id="yr"></span> GlossPak. Avtomatik palletlash yechimlari.</div>
+      <div><a href="tel:+998000000000">+998 00 000 00 00</a></div>
+    </footer>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================================
+   TELEGRAM SOZLAMASI
+   -------------------------------------------------------------------------
+   Variant A (TAVSIYA ETILADI) — o'z endpointingiz orqali.
+   Bot tokeni serverda qoladi, sahifa kodida ko'rinmaydi.
+     endpoint: "https://sizning-domen.uz/api/lead"
+
+   Variant B (tez ishga tushirish) — to'g'ridan-to'g'ri Telegram Bot API.
+   Diqqat: bot tokeni sahifa kodida ochiq bo'ladi, uni har kim ko'ra oladi.
+     botToken: "123456789:AA...", chatId: "-1001234567890"
+
+   chatId ni bilish: botga guruhda yozing, so'ng oching:
+   https://api.telegram.org/bot<TOKEN>/getUpdates
+   ========================================================================= */
+const CONFIG = {
+  endpoint: "/api/lead",   // Vercel: api/lead.js orqali ketadi
+  botToken: "",
+  chatId: ""
+};
+
+/* ---------- yordamchilar ---------- */
+const $ = s => document.querySelector(s);
+const nf = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
+const digits = s => (s || "").replace(/\D/g, "");
+
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* Rasm hali qo'yilmagan bo'lsa, o'rniga fayl nomi ko'rsatiladi.
+   img/ papkasiga o'z suratlaringizni tashlang — ular avtomatik chiqadi. */
+document.querySelectorAll(".plate img").forEach(img => {
+  const mark = () => img.closest(".shot").classList.add("empty");
+  img.addEventListener("error", mark);
+  if (img.complete && img.naturalWidth === 0) mark();
+});
+/* ---------- Kalkulyator ----------
+   Mantiq: qo'lda o'raganda plyonka ham, vaqt ham ortiqcha ketadi.
+   Ikkalasining farqi = mijoz har oy tejaydigan pul.
+   Quyidagi konstantalarni o'z ko'rsatkichlaringizga moslang.
+--------------------------------------------------------------- */
+const MACHINE_FILM_G = 350;          // palletayzer bir poddonga sarflaydigan plyonka, gramm
+const MIN_SAVED      = 1;            // bir poddonda tejaladigan vaqt, daqiqa
+const WORK_DAYS      = 26;           // oyiga ish kunlari
+const HOURS_PER_DAY  = 8;            // smena uzunligi, soat
+const WORKER_SALARY  = 4500000;      // ishchining oylik xarajati (maosh + soliqlar), so'm
+const MACHINE_PRICE  = 160000000;    // palletayzer narxi (yetkazish va o'rnatish bilan), so'm
+
+const elPallets = $("#pallets"), elFilmManual = $("#filmManual"), elFilmPrice = $("#filmPrice");
+const numFields = [elPallets, elFilmManual, elFilmPrice];
+
+function calc(){
+  const perDay   = +digits(elPallets.value) || 0;    // kuniga poddon
+  const manualG  = +digits(elFilmManual.value) || 0;  // qo'lda, gramm/poddon
+  const pricePkg = +digits(elFilmPrice.value) || 0;   // so'm/kg
+
+  // 1. Masshtab — oyiga nechta poddon
+  const perMonth = perDay * WORK_DAYS;
+
+  // 2. Plyonka: poddondagi farq -> oyiga kilogramm -> so'm
+  const diffG    = Math.max(0, manualG - MACHINE_FILM_G);
+  const kgMonth  = diffG * perMonth / 1000;
+  const filmSave = kgMonth * pricePkg;
+
+  // 3. Vaqt: tejalgan daqiqalar -> soat -> ish haqi
+  const hourRate = WORKER_SALARY / (WORK_DAYS * HOURS_PER_DAY);
+  const hrsMonth = MIN_SAVED * perMonth / 60;
+  const timeSave = hrsMonth * hourRate;
+
+  // 4. Jami tejash
+  const monthSave = filmSave + timeSave;
+  const yearSave  = monthSave * 12;
+
+  // Plyonka solishtiruvi — ikkala chiziq ham kattarog'iga nisbatan chiziladi
+  const base = Math.max(manualG, MACHINE_FILM_G);
+  $("#barManualV").textContent  = nf(manualG) + " g";
+  $("#barMachineV").textContent = nf(MACHINE_FILM_G) + " g";
+  $("#barManual").style.width   = (manualG / base * 100).toFixed(1) + "%";
+  $("#barMachine").style.width  = (MACHINE_FILM_G / base * 100).toFixed(1) + "%";
+  $("#barDiff").textContent     = nf(diffG) + " g";
+  $("#barKg").textContent       = nf(kgMonth) + " kg";
+
+  // Natijalar
+  $("#rMonth").textContent = nf(monthSave);
+  $("#rYear").textContent  = nf(yearSave);
+  $("#rFilm").textContent  = nf(filmSave) + " so'm";
+  $("#rTime").textContent  = nf(timeSave) + " so'm";
+
+  // Qoplash muddati va 3 yillik sof foyda
+  if (monthSave > 0){
+    const months = MACHINE_PRICE / monthSave;
+    $("#rPayback").textContent =
+      months < 1    ? "1 oydan kam" :
+      months > 120  ? "10 yildan ko'p" :
+      months >= 24  ? (months / 12).toFixed(1).replace(".", ",") + " yil"
+                    : Math.round(months) + " oy";
+    $("#rThree").textContent = nf(monthSave * 36 - MACHINE_PRICE);
+  } else {
+    $("#rPayback").textContent = "—";
+    $("#rThree").textContent   = "—";
+  }
+}
+
+// Uchala maydon ham bir xil ishlaydi: yozilganda raqam formatlanadi,
+// maydondan chiqilganda bo'sh yoki juda katta qiymat to'g'rilanadi.
+numFields.forEach(el => {
+  el.addEventListener("input", () => {
+    const v = digits(el.value);
+    el.value = v ? nf(+v) : "";
+    calc();
+  });
+  el.addEventListener("blur", () => {
+    let v = +digits(el.value) || 0;
+    if (v <= 0) v = +el.dataset.default;
+    if (v > +el.dataset.max) v = +el.dataset.max;
+    el.value = nf(v);
+    calc();
+  });
+  el.addEventListener("focus", () => el.select());
+});
+
+calc();
+
+/* ---------- Lid forma → Telegram ---------- */
+const form = $("#leadForm"), msg = $("#formMsg"), btn = $("#submitBtn");
+
+function showMsg(text, ok){
+  msg.textContent = text;
+  msg.className = "form-msg show " + (ok ? "ok" : "bad");
+}
+
+function buildText(d){
+  return [
+    "\ud83d\udfe6 GlossPak \u2014 yangi ariza",
+    "",
+    "\ud83d\udc64 Ism: " + d.name,
+    "\ud83d\udcde Telefon: " + d.phone,
+    "\ud83c\udfed Korxona: " + (d.company || "\u2014"),
+    "\ud83d\udcac Izoh: " + (d.comment || "\u2014"),
+    "",
+    "\u2014 Kalkulyator \u2014",
+    "Kuniga poddon: " + elPallets.value + " ta",
+    "Qo'lda plyonka: " + elFilmManual.value + " g/poddon",
+    "Plyonka narxi: " + elFilmPrice.value + " so'm/kg",
+    "Oylik tejash: " + $("#rMonth").textContent + " so'm",
+    "  \u00b7 plyonka: " + $("#rFilm").textContent,
+    "  \u00b7 vaqt: " + $("#rTime").textContent,
+    "Yillik tejash: " + $("#rYear").textContent + " so'm",
+    "Qoplash muddati: " + $("#rPayback").textContent
+  ].join("\n");
+}
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const d = {
+    name: $("#name").value.trim(),
+    phone: $("#phone").value.trim(),
+    company: $("#company").value.trim(),
+    comment: $("#comment").value.trim()
+  };
+
+  let bad = false;
+  $("#name").classList.toggle("err", !d.name);
+  if (!d.name) bad = true;
+  const okPhone = digits(d.phone).length >= 9;
+  $("#phone").classList.toggle("err", !okPhone);
+  if (!okPhone) bad = true;
+
+  if (bad){
+    showMsg("Ism va telefon raqamini to'g'ri kiriting.", false);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Yuborilmoqda...";
+  msg.className = "form-msg";
+
+  try {
+    let res;
+    if (CONFIG.endpoint){
+      res = await fetch(CONFIG.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...d, text: buildText(d) })
+      });
+    } else if (CONFIG.botToken && CONFIG.chatId){
+      res = await fetch("https://api.telegram.org/bot" + CONFIG.botToken + "/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CONFIG.chatId,
+          text: buildText(d),
+          disable_web_page_preview: true
+        })
+      });
+    } else {
+      throw new Error("Telegram sozlanmagan");
+    }
+
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    $("#formCard").innerHTML =
+      '<div class="sent">' +
+        '<div class="ic">' +
+          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+          'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' +
+        '</div>' +
+        '<h3>Rahmat! Arizangiz qabul qilindi.</h3>' +
+        '<p>Mutaxassisimiz 1 ish kuni ichida siz bilan bog\'lanadi.</p>' +
+      '</div>';
+  } catch (err){
+    btn.disabled = false;
+    btn.textContent = "Ariza yuborish";
+    showMsg("Yuborishda xatolik. Iltimos, qayta urinib ko'ring yoki telefon orqali bog'laning.", false);
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>
