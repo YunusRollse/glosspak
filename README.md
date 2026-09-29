@@ -118,22 +118,28 @@ Maydondan chiqilganda juda katta son `data-max` bilan cheklanadi.
 ```
 Oylik hajm      = poddon/kun × 26 ish kuni
 
-Plyonka         = (qo'lda g/poddon − 350 g) × oylik hajm ÷ 1000 × plyonka narxi
-Vaqt            = 1 daqiqa × oylik hajm ÷ 60 × (4 500 000 ÷ (26 × 8))
+Tejalgan plyonka = qo'lda g/poddon × 55%          ← ULUSH, qat'iy gramm emas
+Plyonka          = tejalgan g × oylik hajm ÷ 1000 × plyonka narxi
+Vaqt             = 1 daqiqa × oylik hajm ÷ 60 × (4 500 000 ÷ (26 × 8))
 
-Oylik tejash   = Plyonka + Vaqt
-Yillik tejash  = Oylik × 12
-Qoplash muddati= 160 000 000 ÷ Oylik
-3 yillik foyda = Oylik × 36 − 160 000 000
+Oylik tejash    = Plyonka + Vaqt
+Yillik tejash   = Oylik × 12
+Qoplash muddati = 160 000 000 ÷ Oylik
+3 yillik foyda  = Oylik × 36 − 160 000 000
 ```
 
-Standart qiymatlarda (40 poddon/kun, 1100 g, 28 000 so'm/kg) natija:
-**22 215 000 so'm/oy**, yiliga 266 580 000 so'm, uskuna **7 oyda** qoplanadi.
+**Muhim.** Palletayzer qat'iy gramm sarflamaydi — u hozirgi sarfning bir
+ULUSHINI tejaydi. Shuning uchun hisob har doim `FILM_SAVE_RATE` foizini oladi:
+mijoz 800 g sarflasa ham, 1500 g sarflasa ham tejash 55% bo'lib qoladi, faqat
+so'mdagi summa o'zgaradi. Bu haqiqatga mos va bo'rttirilgan va'da bermaydi.
+
+Standart qiymatlarda (40 poddon/kun, 1100 g, 28 000 so'm/kg):
+**17 992 600 so'm/oy**, yiliga 215 911 200 so'm, uskuna **9 oyda** qoplanadi.
 
 Farazlarni script boshidagi konstantalardan o'zgartiring:
 
 ```js
-const MACHINE_FILM_G = 350;        // palletayzer bir poddonga sarflaydigan plyonka, g
+const FILM_SAVE_RATE = 0.55;       // o'rtacha tejash ULUSHI (50-60% oralig'ining o'rtasi)
 const MIN_SAVED      = 1;          // bir poddonda tejaladigan vaqt, daqiqa
 const WORK_DAYS      = 26;         // oyiga ish kunlari
 const HOURS_PER_DAY  = 8;          // smena uzunligi, soat
@@ -142,10 +148,13 @@ const MACHINE_PRICE  = 160000000;  // palletayzer narxi, so'm
 ```
 
 Plyonka solishtiruvi (qizil «Qo'lda» va ko'k «Palletayzer bilan» chiziqlar)
-shu raqamlardan avtomatik chiziladi — alohida sozlash kerak emas.
+shu ulushdan avtomatik chiziladi: ko'k chiziq har doim qizilning 45% i.
 
 ## O'zgartirish kerak bo'lgan joylar
 
 - Footer'dagi telefon raqami: `+998 00 000 00 00` (2 joyda — `href` va matn).
-- `MACHINE_PRICE` va `MACHINE_FILM_G` — o'z uskunangiz ko'rsatkichlariga moslang.
+- `MACHINE_PRICE` — o'z narxingizga moslang.
+- `FILM_SAVE_RATE` — hozir 0.55. Amaliyotda 50-60% bo'lsa, shu oraliqdan
+  eng ehtiyotkor raqamni tanlagan ma'qul: mijoz keyin ko'proq tejasa xursand
+  bo'ladi, kamroq tejasa — ishonch yo'qoladi.
 - Standart plyonka narxi `28 000` so'm/kg — bozor narxiga qarab yangilang.

@@ -418,7 +418,7 @@ footer a:hover{text-decoration:underline}
             </div>
             <div class="money">
               <input type="text" id="filmManual" inputmode="numeric" placeholder="Masalan, 1 100"
-                     data-max="9000" autocomplete="off">
+                     data-max="20000" autocomplete="off">
               <span class="cur">gramm</span>
             </div>
             <div class="field-hint">Qo'lda o'raganda odatda 900–1400 g</div>
@@ -439,19 +439,19 @@ footer a:hover{text-decoration:underline}
           <div class="film">
             <div class="film-row">
               <div class="film-head">
-                <span>Qo'lda</span><span class="film-v" id="barManualV">1 100 g</span>
+                <span>Qo'lda</span><span class="film-v" id="barManualV">—</span>
               </div>
               <div class="film-track"><div class="film-fill manual" id="barManual"></div></div>
             </div>
             <div class="film-row">
               <div class="film-head">
-                <span>Palletayzer bilan</span><span class="film-v ok" id="barMachineV">350 g</span>
+                <span>Palletayzer bilan</span><span class="film-v ok" id="barMachineV">—</span>
               </div>
               <div class="film-track"><div class="film-fill machine" id="barMachine"></div></div>
             </div>
             <p class="film-note">
-              Har bir poddonda <b id="barDiff">750 g</b> plyonka tejaladi —
-              bu oyiga <b id="barKg">780 kg</b> plyonka.
+              Har bir poddonda <b id="barDiff">—</b> plyonka tejaladi
+              (<b id="barPct">—</b>) — bu oyiga <b id="barKg">—</b> plyonka.
             </p>
           </div>
         </div>
@@ -490,9 +490,10 @@ footer a:hover{text-decoration:underline}
           </div>
 
           <p class="note">
-            Hisobda: palletayzer bir poddonga <b>350 g</b> plyonka sarflaydi va poddonni
-            <b>1 daqiqa</b> tezroq o'raydi; oyiga <b>26</b> ish kuni, ishchining oylik
-            xarajati <b>4 500 000</b> so'm, uskuna narxi <b>160 000 000</b> so'm.
+            Hisobda: palletayzer plyonkani kuchli tortgani uchun hozirgi sarfingizdan
+            o'rtacha <b>55%</b> kam plyonka ishlatadi va poddonni <b>1 daqiqa</b> tezroq
+            o'raydi; oyiga <b>26</b> ish kuni, ishchining oylik xarajati
+            <b>4 500 000</b> so'm, uskuna narxi <b>160 000 000</b> so'm.
             Raqamlar taxminiy — aniq taklif uchun ariza qoldiring.
           </p>
           </div>
@@ -635,7 +636,9 @@ document.querySelectorAll(".plate img").forEach(img => {
    Ikkalasining farqi = mijoz har oy tejaydigan pul.
    Quyidagi konstantalarni o'z ko'rsatkichlaringizga moslang.
 --------------------------------------------------------------- */
-const MACHINE_FILM_G = 350;          // palletayzer bir poddonga sarflaydigan plyonka, gramm
+// Palletayzer plyonkani kuchli tortgani uchun hozirgi sarfning bir qismini tejaydi.
+// Bu ULUSH, qat'iy gramm emas: mijoz qancha ko'p sarflasa, shuncha ko'p tejaydi.
+const FILM_SAVE_RATE = 0.55;         // o'rtacha tejash ulushi (50-60% oralig'ining o'rtasi)
 const MIN_SAVED      = 1;            // bir poddonda tejaladigan vaqt, daqiqa
 const WORK_DAYS      = 26;           // oyiga ish kunlari
 const HOURS_PER_DAY  = 8;            // smena uzunligi, soat
@@ -661,8 +664,9 @@ function calc(){
   // 1. Masshtab — oyiga nechta poddon
   const perMonth = perDay * WORK_DAYS;
 
-  // 2. Plyonka: poddondagi farq -> oyiga kilogramm -> so'm
-  const diffG    = Math.max(0, manualG - MACHINE_FILM_G);
+  // 2. Plyonka: hozirgi sarfning FILM_SAVE_RATE ulushi tejaladi
+  const machineG = manualG * (1 - FILM_SAVE_RATE);
+  const diffG    = manualG - machineG;
   const kgMonth  = diffG * perMonth / 1000;
   const filmSave = kgMonth * pricePkg;
 
@@ -675,13 +679,13 @@ function calc(){
   const monthSave = filmSave + timeSave;
   const yearSave  = monthSave * 12;
 
-  // Plyonka solishtiruvi — ikkala chiziq ham kattarog'iga nisbatan chiziladi
-  const base = Math.max(manualG, MACHINE_FILM_G);
+  // Plyonka solishtiruvi
   $("#barManualV").textContent  = nf(manualG) + " g";
-  $("#barMachineV").textContent = nf(MACHINE_FILM_G) + " g";
-  $("#barManual").style.width   = (manualG / base * 100).toFixed(1) + "%";
-  $("#barMachine").style.width  = (MACHINE_FILM_G / base * 100).toFixed(1) + "%";
+  $("#barMachineV").textContent = nf(machineG) + " g";
+  $("#barManual").style.width   = "100%";
+  $("#barMachine").style.width  = ((1 - FILM_SAVE_RATE) * 100).toFixed(0) + "%";
   $("#barDiff").textContent     = nf(diffG) + " g";
+  $("#barPct").textContent      = (FILM_SAVE_RATE * 100).toFixed(0) + "%";
   $("#barKg").textContent       = nf(kgMonth) + " kg";
 
   // Natijalar
