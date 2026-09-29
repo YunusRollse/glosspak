@@ -108,8 +108,12 @@ Mijoz **uchta** maydonni qo'lda to'ldiradi — o'zi aniq biladigan raqamlarni:
 kuniga nechta poddon o'raydi, hozir bitta poddonga qancha plyonka ketadi,
 plyonkaning 1 kg narxi. Qolgani oldindan qo'yilgan.
 
-Maydondan chiqilganda qiymat tekshiriladi: bo'sh qolsa standart qiymat
-qaytariladi, juda katta son `data-max` bilan cheklanadi.
+Maydonlar **bo'sh boshlanadi**. Uchalasi to'ldirilmaguncha natija ham,
+plyonka solishtiruvi ham ko'rinmaydi — o'rnida "Uchta maydonni to'ldiring"
+degan yozuv turadi. Shunda mijoz faqat o'z raqamlariga asoslangan hisobni
+ko'radi. Biror maydon tozalansa, kalkulyator yana kutish holatiga qaytadi.
+
+Maydondan chiqilganda juda katta son `data-max` bilan cheklanadi.
 
 ```
 Oylik hajm      = poddon/kun × 26 ish kuni
