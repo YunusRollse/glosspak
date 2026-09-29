@@ -70,6 +70,43 @@ cd /Users/yunusbekpulatov/glosspak-landing && npx vercel dev
 - Kalkulyatordagi `MACHINE_PRICE` (160 000 000) va plyonka narxi (28 000) —
   haqiqiy raqamlaringizga moslang.
 
+## Tezlik
+
+Sahifa tashqi serverga **umuman murojaat qilmaydi** — hamma narsa o'zimizdan
+keladi. Sekin mobil internetda eng ko'p vaqt aynan tashqi domenlarga
+ulanishga ketadi, shuning uchun bu eng katta yutuq.
+
+| Nima | Qanday |
+|---|---|
+| Shrift | Google Fonts o'rniga `fonts/inter-latin.woff2` (48 KB, bitta fayl, barcha qalinliklar) |
+| Rasmlar | WebP, ko'rsatiladigan o'lchamga qirqilgan: 453 KB → 98 KB |
+| Sferalar | 4 ta emas 3 ta, blur 90px → 60px, animatsiyada `scale` olib tashlandi |
+| Panellar | `backdrop-filter` olib tashlandi — aylantirishda eng qimmat amal edi |
+| Kesh | `vercel.json`: rasm va shrift bir yil keshlanadi |
+
+Jami: **~181 KB**, tashqi so'rovlar — 0, layout siljishi (CLS) — 0.
+
+### Rasm qo'shsangiz
+
+Yangi suratni ham WebP ga o'tkazing va `<img>` ga `width`/`height` yozing —
+bularsiz rasm yuklanganda sahifa sakraydi:
+
+```bash
+cd /Users/yunusbekpulatov/glosspak-landing && python3 -c "
+from PIL import Image
+im = Image.open('img/yangi.jpg')
+im.thumbnail((900, 900))
+im.save('img/yangi.webp', 'WEBP', quality=84, method=6)
+print(im.size)"
+```
+
+### Shriftni yangilash
+
+`fonts/inter-latin.woff2` — Google Fonts'ning `latin` poddasti. Sahifadagi
+barcha belgilar shu poddastga kiradi (tekshirilgan), shuning uchun
+`latin-ext` kerak emas. Shriftni almashtirsangiz, `@font-face` ichidagi
+`unicode-range` ni ham yangilang.
+
 ## Rasmlar
 
 `img/` papkasidagi fayllar:
