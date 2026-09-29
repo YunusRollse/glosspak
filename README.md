@@ -67,7 +67,6 @@ cd /Users/yunusbekpulatov/glosspak-landing && npx vercel dev
 
 ## Chiqarishdan oldin tekshiring
 
-- Footer'dagi telefon raqami hali `+998 00 000 00 00` — o'zingiznikiga almashtiring.
 - Kalkulyatordagi `MACHINE_PRICE` (160 000 000) va plyonka narxi (28 000) —
   haqiqiy raqamlaringizga moslang.
 
