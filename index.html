@@ -305,6 +305,21 @@ label{font-size:14.5px;font-weight:500;color:#c3cddf}
   font-size:13px;line-height:1.6;color:#6f7e99;
 }
 
+/* Natija chiqqanda paydo bo'ladigan tugma.
+   Diqqatni tortish uchun atrofida halqa kengayib so'nadi — tugmaning
+   o'zi joyidan qimirlamaydi, shuning uchun bosishga xalaqit bermaydi. */
+.res-cta{margin-top:22px}
+.res-cta .btn{width:100%;padding:15px}
+.btn-pulse{animation:pulse 2.4s cubic-bezier(.4,0,.6,1) infinite}
+@keyframes pulse{
+  0%   {box-shadow:0 8px 30px rgba(45,90,220,.35), 0 0 0 0 rgba(93,145,255,.5)}
+  70%  {box-shadow:0 8px 30px rgba(45,90,220,.35), 0 0 0 14px rgba(93,145,255,0)}
+  100% {box-shadow:0 8px 30px rgba(45,90,220,.35), 0 0 0 0 rgba(93,145,255,0)}
+}
+@media (prefers-reduced-motion: reduce){
+  .btn-pulse{animation:none}
+}
+
 /* ---------- Lid forma ---------- */
 .lead-sec .inner{
   max-width:620px;margin:0 auto;text-align:center;
@@ -533,6 +548,10 @@ footer a:hover{text-decoration:underline}
             <div class="pb-v" id="rPayback">—</div>
             <div class="pb-sub">Keyin esa shu pul sizda qoladi.
               3 yilda sof foyda — <b id="rThree">—</b> so'm.</div>
+          </div>
+
+          <div class="res-cta">
+            <a class="btn btn-primary btn-pulse" href="#ariza">Ariza qoldirish</a>
           </div>
 
           <p class="note">
