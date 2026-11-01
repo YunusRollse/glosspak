@@ -293,6 +293,7 @@ label{font-size:14.5px;font-weight:500;color:#c3cddf}
   margin-top:24px;padding:20px;border-radius:13px;
   background:rgba(127,227,168,.07);border:1px solid rgba(127,227,168,.22);
 }
+.payback.hidden{display:none}
 .pb-k{font-size:13px;color:#8fc9a8;margin-bottom:4px}
 .pb-v{font-size:30px;font-weight:700;letter-spacing:-.03em;color:#8fe9b4;font-variant-numeric:tabular-nums;line-height:1.1}
 .pb-sub{margin-top:9px;font-size:13px;color:#8e9bb5;line-height:1.55}
@@ -543,7 +544,7 @@ footer a:hover{text-decoration:underline}
             </div>
           </div>
 
-          <div class="payback">
+          <div class="payback" id="payback">
             <div class="pb-k">Palletayzer o'zini qoplaydi</div>
             <div class="pb-v" id="rPayback">—</div>
             <div class="pb-sub">Keyin esa shu pul sizda qoladi.
@@ -764,6 +765,9 @@ function calc(){
   $("#rTime").textContent  = nf(timeSave) + " so'm";
 
   // Qoplash muddati va 3 yillik sof foyda
+  // Qoplash muddati 1 yildan oshsa, plashka ko'rsatilmaydi: uzoq muddat
+  // mijozni qo'rqitadi. Qiymatning o'zi hisoblanaveradi — Telegramga
+  // ketadigan xabarda menejer uni baribir ko'radi.
   if (monthSave > 0){
     const months = MACHINE_PRICE / monthSave;
     $("#rPayback").textContent =
@@ -772,9 +776,13 @@ function calc(){
       months >= 24  ? (months / 12).toFixed(1).replace(".", ",") + " yil"
                     : Math.round(months) + " oy";
     $("#rThree").textContent = nf(monthSave * 36 - MACHINE_PRICE);
+    // Ko'rsatilayotgan raqamning o'ziga qaraymiz: "13 oy" deb yozilgan
+    // holat ham berkitilsin (12,6 oy yaxlitlanganda 13 bo'lib qoladi).
+    $("#payback").classList.toggle("hidden", Math.round(months) >= 13);
   } else {
     $("#rPayback").textContent = "—";
     $("#rThree").textContent   = "—";
+    $("#payback").classList.add("hidden");
   }
 }
 
