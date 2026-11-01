@@ -565,8 +565,8 @@ footer a:hover{text-decoration:underline}
               <input type="text" id="company" name="company" placeholder="Masalan: Gloss Food MChJ" autocomplete="organization">
             </div>
             <div class="f">
-              <label for="comment">Izoh <span style="color:#6f7e99">(ixtiyoriy)</span></label>
-              <textarea id="comment" name="comment" rows="3" placeholder="Qanday mahsulot palletlanadi, kunlik hajm..."></textarea>
+              <label for="comment">Mahsulot turi</label>
+              <textarea id="comment" name="comment" rows="3" placeholder="Masalan: un qoplari, ichimlik qutilari, plastik idishlar..."></textarea>
             </div>
             <button type="submit" class="btn btn-primary" id="submitBtn">Ariza yuborish</button>
             <p class="form-msg" id="formMsg"></p>
@@ -785,7 +785,7 @@ function buildText(d){
     "\ud83d\udc64 Ism: " + d.name,
     "\ud83d\udcde Telefon: " + d.phone,
     "\ud83c\udfed Korxona: " + (d.company || "\u2014"),
-    "\ud83d\udcac Izoh: " + (d.comment || "\u2014")
+    "\ud83d\udce6 Mahsulot turi: " + (d.comment || "\u2014")
   ];
 
   // Mijoz kalkulyatorni to'ldirmagan bo'lishi ham mumkin

@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
   const text = clean(body.text, 3500) ||
     `GlossPak — yangi ariza\n\nIsm: ${name}\nTelefon: ${phone}\n` +
     `Korxona: ${clean(body.company, LIMITS.company) || "—"}\n` +
-    `Izoh: ${clean(body.comment, LIMITS.comment) || "—"}`;
+    `Mahsulot turi: ${clean(body.comment, LIMITS.comment) || "—"}`;
 
   try {
     const tg = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
