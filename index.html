@@ -126,17 +126,19 @@ header.nav{padding:26px 0}
 }
 .dot{width:6px;height:6px;border-radius:50%;background:#5b8cff;box-shadow:0 0 10px #5b8cff}
 h1{
-  margin:0 0 22px;
-  font-size:clamp(30px,4.8vw,48px);
-  line-height:1.08;
-  letter-spacing:-.035em;
+  margin:0 0 26px;
+  font-size:clamp(31px,5vw,52px);
+  line-height:1.17;
+  letter-spacing:-.022em;
   font-weight:700;
+  text-wrap:balance;
 }
 h1 .soft{color:#7f93bb}
 h1 .hl{color:#7fa6ff}
 .lead{
   margin:0 0 36px;
   font-size:clamp(16.5px,2.1vw,19px);
+  line-height:1.65;
   color:var(--muted);
   max-width:600px;
 }
@@ -160,7 +162,7 @@ h1 .hl{color:#7fa6ff}
 /* ---------- Bo'limlar ---------- */
 section{padding:76px 0;border-top:1px solid var(--line)}
 .sec-head{max-width:620px;margin-bottom:40px}
-h2{margin:0 0 12px;font-size:clamp(26px,4vw,36px);letter-spacing:-.03em;line-height:1.15;font-weight:700}
+h2{margin:0 0 14px;font-size:clamp(25px,3.9vw,36px);letter-spacing:-.022em;line-height:1.22;font-weight:700;text-wrap:balance}
 .sec-sub{margin:0;color:var(--muted);font-size:16.5px}
 
 /* ---------- Uskuna fotolari ---------- */
@@ -258,7 +260,7 @@ label{font-size:14.5px;font-weight:500;color:#c3cddf}
 .film-fill{height:100%;border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
 .film-fill.manual{background:linear-gradient(90deg,#a8452f,#d0664c)}
 .film-fill.machine{background:linear-gradient(90deg,#2c5adf,#5b8cff)}
-.film-note{margin:14px 0 0;font-size:13px;color:#8e9bb5;line-height:1.55}
+.film-note{margin:14px 0 0;font-size:13px;color:#8e9bb5;line-height:1.62}
 .film-note b{color:#e8eefb;font-weight:600;font-variant-numeric:tabular-nums}
 
 /* Kutish holati: maydonlar to'ldirilmaguncha */
@@ -296,7 +298,7 @@ label{font-size:14.5px;font-weight:500;color:#c3cddf}
 .payback.hidden{display:none}
 .pb-k{font-size:13px;color:#8fc9a8;margin-bottom:4px}
 .pb-v{font-size:30px;font-weight:700;letter-spacing:-.03em;color:#8fe9b4;font-variant-numeric:tabular-nums;line-height:1.1}
-.pb-sub{margin-top:9px;font-size:13px;color:#8e9bb5;line-height:1.55}
+.pb-sub{margin-top:10px;font-size:13px;color:#8e9bb5;line-height:1.62}
 .pb-sub b{color:#e8eefb;font-weight:600;font-variant-numeric:tabular-nums}
 .res-item .k{font-size:13px;color:var(--muted);margin-bottom:6px}
 .res-item .v{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
@@ -317,7 +319,7 @@ label{font-size:14.5px;font-weight:500;color:#c3cddf}
   margin-bottom:14px;padding:12px 14px;border-radius:12px;
   background:rgba(255,196,110,.08);
   border:1px solid rgba(255,196,110,.22);
-  color:#f0cf9c;font-size:13.5px;line-height:1.45;
+  color:#f0cf9c;font-size:13.5px;line-height:1.55;
 }
 .instalment svg{flex:none;opacity:.85}
 .res-cta .btn{width:100%;padding:15px}
@@ -405,6 +407,12 @@ footer a:hover{text-decoration:underline}
   }
   section{padding:52px 0}
   .hero{padding:40px 0 56px}
+  /* Telefonda satrlar qisqa — shuning uchun oraliq kattaroq bo'lishi kerak,
+     aks holda matn yaxlit devorga aylanadi. */
+  h1{line-height:1.25;letter-spacing:-.012em;margin-bottom:22px}
+  h2{line-height:1.26;letter-spacing:-.012em}
+  .lead{line-height:1.7}
+  .sec-sub{line-height:1.65}
   .sec-head{margin-bottom:28px}
   .panel,.form-card{padding:20px}
   .row2{grid-template-columns:1fr}
@@ -448,8 +456,7 @@ footer a:hover{text-decoration:underline}
     <div class="hero">
       <span class="eyebrow"><span class="dot"></span> Avtomatik palletlash yechimlari</span>
       <h1>Qadoqlash jarayonini avtomatlashtirib<br>
-        <span class="hl">3 barobargacha</span> tejamkorlik ko'rishga
-        <span class="soft">tayyormisiz?</span></h1>
+        <span class="hl">3 barobargacha</span> tejamkorlik ko'ring!</h1>
       <p class="lead">
         Palletayzer orqali stretch o'rashni (qadoqlash jarayonini) avtomatlashtirish
         orqali plyonka xarajatini o'rtacha 3 barobargacha tushirasiz.
