@@ -10,6 +10,36 @@
 <!-- Shrift o'z serverimizdan: tashqi domenga ulanish, DNS va qo'shimcha
      so'rovlar yo'q. Bitta o'zgaruvchan fayl barcha qalinliklarni qoplaydi. -->
 <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Meta Pixel. Tashqi skript sahifa chizilib bo'lgandan keyin yuklanadi,
+     shuning uchun birinchi ekran tezligi o'zgarmaydi. fbq() chaqiruvlari
+     navbatga tushadi va skript yuklangach Metaga yuboriladi. -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+f.__fbLoad=function(){if(f.__fbDone)return;f.__fbDone=1;
+t=b.createElement(e);t.async=!0;t.src=v;
+s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);};
+}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '29459848420265215');
+fbq('track', 'PageView');
+
+// Skriptni sahifa to'liq yuklangach yoki foydalanuvchi birinchi
+// harakat qilganida — qaysi biri oldin bo'lsa — qo'shamiz.
+if (document.readyState === 'complete') window.__fbLoad();
+else addEventListener('load', window.__fbLoad, { once: true });
+['pointerdown','keydown','scroll'].forEach(function(ev){
+  addEventListener(ev, window.__fbLoad, { once: true, passive: true });
+});
+
+// Reklama bloklovchilar fbevents.js ni to'sib qo'yishi mumkin —
+// shuning uchun har bir chaqiruv himoyalangan: xato sahifani buzmaydi.
+function track(name, custom){
+  try { if (window.fbq) window.fbq(custom ? 'trackCustom' : 'track', name); }
+  catch (e) {}
+}
+</script>
 <style>
 @font-face{
   font-family:'Inter';
@@ -436,6 +466,9 @@ footer a:hover{text-decoration:underline}
 </head>
 <body>
 
+<noscript><img height="1" width="1" style="display:none" alt=""
+  src="https://www.facebook.com/tr?id=29459848420265215&amp;ev=PageView&amp;noscript=1"></noscript>
+
 <div class="glow-wrap" aria-hidden="true">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
@@ -752,6 +785,10 @@ function calc(){
   calcBox.classList.toggle("pending", !ready);
   if (!ready) return;
 
+  // Mijoz hisobni ko'rdi — bu kuchli qiziqish signali. Bir marta yuboriladi.
+  if (!calcBox.dataset.tracked){ calcBox.dataset.tracked = "1";
+    track("CalculatorCompleted", true); }
+
   // 1. Masshtab — oyiga nechta poddon
   const perMonth = perDay * WORK_DAYS;
 
@@ -915,6 +952,8 @@ form.addEventListener("submit", async e => {
 
     if (!res.ok) throw new Error("HTTP " + res.status);
 
+    track("Lead");
+
     $("#formCard").innerHTML =
       '<div class="sent">' +
         '<div class="ic">' +
@@ -933,6 +972,10 @@ form.addEventListener("submit", async e => {
           '</a>' +
         '</div>' +
       '</div>';
+
+    // Tugma endigina yaratildi — shuning uchun tinglovchi shu yerda biriktiriladi
+    const tg = $("#formCard").querySelector(".btn-tg");
+    if (tg) tg.addEventListener("click", () => track("Contact"));
   } catch (err){
     btn.disabled = false;
     btn.textContent = "Ariza yuborish";
